@@ -1,0 +1,25 @@
+{
+	"name": "AWS SSO Colourise",
+	"version": "1.0.0",
+	"description": "Change the AWS navbar colour based on account (and a few other little niceties)",
+	"manifest_version": 3,
+	"action": {
+		"default_title": "Options",
+		"default_popup": "popup.html"
+	},
+	"icons": {
+		"128": "icon.png"
+	},
+    "permissions": [
+        "storage"
+    ],
+	"host_permissions": [
+		"*://*.console.aws.amazon.com/*"
+	],
+	"content_scripts": [
+		{
+		  "matches": ["*://*.console.aws.amazon.com/*"],
+		  "js": ["main.js"]
+		}
+	]
+}
