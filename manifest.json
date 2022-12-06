@@ -11,7 +11,8 @@
 		"128": "icon.png"
 	},
     "permissions": [
-        "storage"
+        "storage",
+		"clipboardWrite"
     ],
 	"host_permissions": [
 		"*://*.console.aws.amazon.com/*"

@@ -6,27 +6,59 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <style>
+        body {
+            width: 480px;
+            min-height: 150px;
+        }
         td,td{
             padding:0.5em;
             white-space: nowrap;
+        }
+        .colourtext { 
+            max-width: 100px;
+        }
+
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            border-collapse:collapse;
+        }
+        .footer {
+            margin-top: auto;
+            padding-bottom: 15px;
+        }
+        html {
+            height: 100%;
+        }
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 
 <body>
-    <table id="accountlist">
-        <thead>
-            <tr>
-                <th>Account ID/Alias</th>
-                <th>Colour</th>
-            </tr>
-        </thead>
-        <tbody>
-        </tbody>
-    </table>
-    <hr />
-    <pr><button id="save">Save</button></pr>
-    <pr><button id="addnew" style="float: right">Add Another Account</button></pr>
+    <div class="container">
+        <table id="accountlist">
+            <thead>
+                <tr>
+                    <th>Account ID/Alias</th>
+                    <th></th>
+                    <th>Colour</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+        <div class="footer">
+            <hr />
+            <pr><button id="save">Save</button></pr>
+            <pr><button id="import">Import</button></pr>
+            <pr><button id="export">Export</button></pr>
+            <pr><button id="addnew" style="float: right">Add Another Account</button></pr>
+        </div>
+    </div>
     <script src="./popup.js"></script>
 </body>
 
