@@ -1,6 +1,6 @@
 {
 	"name": "AWS SSO Colourise",
-	"version": "1.0.0",
+	"version": "1.2.0",
 	"description": "Change the AWS navbar colour based on account (and a few other little niceties)",
 	"manifest_version": 3,
 	"action": {

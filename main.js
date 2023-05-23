@@ -1,11 +1,32 @@
-const regionId = document.querySelector('meta[name="awsc-mezz-region"]').content;
-const regionName = document.querySelector('[data-testid="awsc-nav-regions-menu-button"]>span').innerText;
-const accessandUser = document.querySelector('[data-testid="awsc-nav-account-menu-button"]>span').innerText;
-const accountAlias = document.querySelector('[data-testid="awsc-nav-account-menu-button"]>span').title.split('@')[2].replace(' ', '')
-const accountNumber = document.querySelector('input[name=account]').value;
+let currentData = undefined;
 
-document.querySelector('[data-testid="awsc-nav-regions-menu-button"]>span').innerText = regionId + " (" + regionName + ")";
-document.querySelector('[data-testid="awsc-nav-account-menu-button"]>span').innerHTML = "<strong>" + accountAlias + "</strong>:  " + accessandUser;
+window.onload = function() {
+    pageLoad(1);
+}
+
+function pageLoad(counter) {
+    const menuExists = document.querySelector('[data-testid="awsc-nav-regions-menu-button"]>span');
+    if (currentData && menuExists || counter > 10)
+    {
+        let regionId = document.querySelector('meta[name="awsc-mezz-region"]').content;
+        const regionName = document.querySelector('[data-testid="awsc-nav-regions-menu-button"]>span').innerText;
+
+        if (regionName == "Global") {
+            regionId = "🌍";
+        }
+
+        const accessandUser = document.querySelector('[data-testid="awsc-nav-account-menu-button"]>span').innerText;
+        const accountAlias = document.querySelector('[data-testid="awsc-nav-account-menu-button"]>span').title.split('@')[2].replace(' ', '')
+        const accountNumber = document.querySelector('input[name=account]').value;
+    
+        document.querySelector('[data-testid="awsc-nav-regions-menu-button"]>span').innerText = regionId + " (" + regionName + ")";
+        document.querySelector('[data-testid="awsc-nav-account-menu-button"]>span').innerHTML = "<strong>" + accountAlias + "</strong>:  " + accessandUser;
+        colourHeader(accountAlias, accountNumber);
+    }
+    else {
+        setTimeout(function() { pageLoad(counter+1) }, 100);
+    }
+}
 
 function shouldTextBeBlack (backgroundcolor) {
     return computeLuminence(backgroundcolor) > 0.179;
@@ -45,28 +66,30 @@ function hexToRgb(hex) {
 //var style = 'background: rgb(2,0,36); background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,121,68,1) 71%)';
 //document.querySelector('[data-testid=awsc-nav-header]>nav').setAttribute('style', style);
 
-chrome.storage.sync.get(['accounts'], (results) => {
-    if (Object.keys(results.accounts).length > 0) {
-        for (const acc in results.accounts) {
-            if (acc == accountAlias || acc == accountNumber)
-            {
-                var colour = results.accounts[acc];
-                var textcolour = '';
-                if (shouldTextBeBlack(colour)) {
-                    textcolour = 'color: #000 !important';
-                }
-                var style = 'background: rgb(2,0,36); background: linear-gradient(90deg, rgba(2,0,36,1) 0%, ' + results.accounts[acc] + ' 71%); ' + textcolour;
-                document.querySelector('[data-testid=awsc-nav-header]>nav').setAttribute('style', style);
-
-                // set text colour to black if required
-                document.querySelector('[data-testid=more-menu__awsc-nav-account-menu-button]').style = textcolour;
-                document.querySelector('[data-testid=more-menu__awsc-nav-regions-menu-button]').style = textcolour;
-                document.querySelector('[data-testid=awsc-nav-support-menu-button]').style = textcolour;
-                document.querySelector('div[data-testid=awsc-phd__bell-icon]').style = textcolour;
-                document.querySelector('[data-testid=awsc-nav-scallop-icon]').style = textcolour;
+function colourHeader(alias, number) {
+    for (const acc in currentData) {
+        if (acc == alias || acc == number)
+        {
+            var colour = currentData[acc];
+            var textcolour = '';
+            if (shouldTextBeBlack(colour)) {
+                textcolour = 'color: #000 !important';
             }
+            var style = 'background: rgb(2,0,36); background: linear-gradient(90deg, rgba(2,0,36,1) 0%, ' + currentData[acc] + ' 71%); ' + textcolour;
+            document.querySelector('[data-testid=awsc-nav-header]>nav').setAttribute('style', style);
+
+            // set text colour to black if required
+            document.querySelector('[data-testid=more-menu__awsc-nav-account-menu-button]').style = textcolour;
+            document.querySelector('[data-testid=more-menu__awsc-nav-regions-menu-button]').style = textcolour;
+            document.querySelector('[data-testid=awsc-nav-support-menu-button]').style = textcolour;
+            document.querySelector('div[data-testid=awsc-phd__bell-icon]').style = textcolour;
+            document.querySelector('[data-testid=awsc-nav-scallop-icon]').style = textcolour;
         }
     }
-    //var style = 'background: rgb(2,0,36); background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(9,121,68,1) 71%)';
-    //document.querySelector('[data-testid=awsc-nav-header]>nav').setAttribute('style', style);
+}
+
+chrome.storage.sync.get(['accounts'], (results) => {
+    if (Object.keys(results.accounts).length > 0) {
+        currentData = results.accounts;
+    }
 });
