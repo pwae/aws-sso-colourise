@@ -16,9 +16,21 @@ function pageLoad(counter) {
         }
 
         const accessandUser = document.querySelector('[data-testid="awsc-nav-account-menu-button"]>span').innerText;
-        const accountAlias = document.querySelector('[data-testid="awsc-nav-account-menu-button"]>span').title.split('@')[2].replace(' ', '')
-        const accountNumber = document.querySelector('input[name=account]').value;
-    
+        const accountTitle = document.querySelector('[data-testid="awsc-nav-account-menu-button"]>span').title;
+        let accountAlias = undefined;
+        if (accountTitle.indexOf('@') >= 0)
+        {
+            const titleSplit = accountTitle.split('@')
+            accountAlias = titleSplit[titleSplit.length-1].replace(' ', '');
+        }
+        let accountNumber = '';
+        if (document.querySelector('input[name=account]'))
+        {
+            accountNumber = document.querySelector('input[name=account]').value;
+        } else {
+            const tmpAN = document.querySelector('div[id=menu--account]').querySelectorAll('span')[1].innerText;
+            accountNumber = tmpAN.replace(/-/g,'');
+        }
         document.querySelector('[data-testid="awsc-nav-regions-menu-button"]>span').innerText = regionId + " (" + regionName + ")";
         document.querySelector('[data-testid="awsc-nav-account-menu-button"]>span').innerHTML = "<strong>" + accountAlias + "</strong>:  " + accessandUser;
         colourHeader(accountAlias, accountNumber);
@@ -67,6 +79,7 @@ function hexToRgb(hex) {
 //document.querySelector('[data-testid=awsc-nav-header]>nav').setAttribute('style', style);
 
 function colourHeader(alias, number) {
+    console.log('Colour for ', alias, ' and ', number);
     for (const acc in currentData) {
         if (acc == alias || acc == number)
         {
